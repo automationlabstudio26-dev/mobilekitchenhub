@@ -72,6 +72,12 @@
     .result-bridge .button { width:100%; margin-top:12px; }
     .result-bridge .button[aria-disabled="true"] { opacity:.55; pointer-events:none; }
     .brief-note { padding:14px 16px; margin:0 0 20px; border-left:4px solid var(--orange); background:#fff8ef; border-radius:8px; }
+    .form-progress { display:flex; gap:10px; margin:0 0 20px; }
+    .form-progress span { flex:1; padding:9px 12px; border-radius:999px; background:#e8eeeb; color:#53615b; text-align:center; font-weight:800; font-size:.86rem; }
+    .form-progress span.active { background:var(--green); color:white; }
+    .form-step[hidden] { display:none; }
+    .step-actions { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .form-disclaimer { margin:14px 0 0; color:#5c6863; font-size:.88rem; line-height:1.55; }
     .panel { background:var(--card); border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); padding:clamp(20px,4vw,34px); }
     fieldset { border:0; padding:0; margin:0; min-width:0; }
     legend { margin-bottom:14px; font-size:1.15rem; font-weight:900; }
@@ -178,9 +184,8 @@
         <div class="section-heading"><div class="eyebrow">Next step</div><h2>Share your structured project brief</h2><p>Connect with regional fabricators or participating builders who may serve your area.</p></div>
         <p class="brief-note"><strong>Your calculator work is already included.</strong> We will attach the selected equipment, running load, safety margin and recommended generator size to your enquiry.</p>
         <form id="leadForm" novalidate>
-          <div class="lead-grid">
-            <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
-            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+          <div class="form-progress" aria-label="Enquiry progress"><span id="progressProject" class="active">1. Project details</span><span id="progressContact">2. Contact details</span></div>
+          <div class="lead-grid form-step" id="projectStep">
             <div class="field"><label for="customAppliance">Other specialty equipment</label><input id="customAppliance" name="customAppliance" type="text" placeholder="e.g. soft-serve machine"></div>
             <div class="field"><label for="customWatts">Manufacturer-rated running watts</label><input id="customWatts" name="customWatts" type="number" min="0" step="50" inputmode="numeric" placeholder="e.g. 2400"></div>
             <div class="field full"><label for="state" id="locationLabel">State / location</label><input id="state" name="state" type="text" autocomplete="address-level1" placeholder="e.g. CA, TX, FL" required></div>
@@ -188,9 +193,16 @@
             <div class="field"><label for="vehicleSize">Vehicle or trailer size</label><input id="vehicleSize" name="vehicleSize" type="text" placeholder="e.g. 18 ft trailer"></div>
             <div class="field"><label for="budget">Estimated budget</label><select id="budget" name="budget" required><option value="">Choose a budget</option><option>Under 25,000</option><option>25,000–50,000</option><option>50,000–100,000</option><option>100,000+</option><option>Not decided</option></select></div>
             <div class="field"><label for="targetDate">Target completion date</label><input id="targetDate" name="targetDate" type="date"></div>
-            <label class="consent full"><input name="consent" type="checkbox" required><span>I agree that Mobile Kitchen Hub may use my details to respond to this request and share them with relevant regional fabricators or participating builders. See our <a href="/privacy-policy">privacy policy</a> for details.</span></label>
-            <div class="full"><button class="button button-primary" id="submitButton" type="submit">Share My Project Brief</button><p id="formStatus" role="status" aria-live="polite"></p></div>
+            <div class="full step-actions"><button class="button button-primary" id="continueToContact" type="button">Continue to Contact Details</button></div>
           </div>
+          <div class="lead-grid form-step" id="contactStep" hidden>
+            <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+            <label class="consent full"><input name="consent" type="checkbox" required><span>I agree that Mobile Kitchen Hub may use my details to respond to this request and share them with relevant regional fabricators or participating builders. See our <a href="/privacy-policy">privacy policy</a> for details.</span></label>
+            <div class="full step-actions"><button class="button button-secondary" id="backToProject" type="button">Back</button><button class="button button-primary" id="submitButton" type="submit">Share My Project Brief</button></div>
+          </div>
+          <p id="formStatus" role="status" aria-live="polite"></p>
+          <p class="form-disclaimer">Directory listings and matches are regional research options, not endorsements or guarantees. Verify trade licences, insurance, references and past builds directly before placing a deposit.</p>
         </form>
       </div>
     </section>
@@ -249,7 +261,7 @@
       const bridgeButton = document.getElementById("quoteBridgeButton");
       bridgeButton.setAttribute("aria-disabled", running === 0 ? "true" : "false");
       document.getElementById("bridgeHeadline").textContent = running === 0 ? "Select your equipment to create a project brief." : `Calculated ${(recommended/1000).toFixed(1)} kW? Turn it into a builder-ready brief.`;
-      document.getElementById("bridgeCopy").textContent = running === 0 ? "Your chosen appliances and power estimate will be carried into the enquiry automatically." : "Reduce the risk of electrical overload and avoidable approval delays by sharing this equipment list with regional fabricators or participating builders.";
+      document.getElementById("bridgeCopy").textContent = running === 0 ? "Your chosen appliances and power estimate will be carried into the enquiry automatically." : "Don't risk electrical overload or avoidable approval delays. Share this exact equipment list with regional fabricators or participating builders in your area.";
       return { runningWatts:running, safetyMarginPercent:Math.round((multiplier-1)*100), recommendedGeneratorKw:Number((recommended/1000).toFixed(1)) };
     }
     let calculatorStarted = false;
@@ -274,6 +286,31 @@
       track("market_changed", { country_code:country.value, electrical_standard:markets[country.value].supply });
     });
     const form = document.getElementById("leadForm"), status = document.getElementById("formStatus"), button = document.getElementById("submitButton");
+    const projectStep = document.getElementById("projectStep"), contactStep = document.getElementById("contactStep");
+    function showFormStep(step) {
+      const showContact = step === "contact";
+      projectStep.hidden = showContact;
+      contactStep.hidden = !showContact;
+      document.getElementById("progressProject").classList.toggle("active", !showContact);
+      document.getElementById("progressContact").classList.toggle("active", showContact);
+    }
+    document.getElementById("continueToContact").addEventListener("click",() => {
+      const currentTotals = totals();
+      if (currentTotals.runningWatts === 0) {
+        status.textContent = "Please select at least one appliance to calculate your power brief.";
+        status.dataset.kind = "error";
+        document.getElementById("calculator").scrollIntoView({behavior:"smooth",block:"start"});
+        return;
+      }
+      const requiredProjectFields = [...projectStep.querySelectorAll("[required]")];
+      const invalidField = requiredProjectFields.find(field => !field.checkValidity());
+      if (invalidField) { invalidField.reportValidity(); return; }
+      status.textContent = ""; status.dataset.kind = "";
+      showFormStep("contact");
+      document.getElementById("name").focus();
+      track("quote_form_step_completed", { step:"project_details", country_code:country.value });
+    });
+    document.getElementById("backToProject").addEventListener("click",() => showFormStep("project"));
     let quoteFormStarted = false;
     form.addEventListener("input",() => {
       if (quoteFormStarted) return;
@@ -328,7 +365,7 @@
         });
         const response = await fetch(WEBHOOK_URL,{method:"POST",body:webhookBody,mode:"no-cors"});
         if (response.type !== "opaque" && !response.ok) throw new Error(`Submission failed (${response.status})`);
-        form.reset(); updateMarket(); totals(); status.textContent = "Thank you—your request was sent for processing."; status.dataset.kind = "success";
+        form.reset(); updateMarket(); totals(); showFormStep("project"); status.textContent = "Thank you—your request was sent for processing."; status.dataset.kind = "success";
         track("lead_submitted", { country_code:selectedCountry, running_watts:payload.runningWatts, recommended_generator_kw:payload.recommendedGeneratorKw, appliance_count:payload.appliances.length });
       } catch (error) {
         status.textContent = "We couldn't send your request. Please try again or contact us directly."; status.dataset.kind = "error";
