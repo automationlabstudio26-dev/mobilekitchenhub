@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="impact-site-verification" value="34ce5c68-7e49-4328-8884-a3a148c95496">
+  <title>Food Truck Generator Calculator &amp; Kitchen Planning | Mobile Kitchen Hub</title>
+  <meta name="description" content="Use our free Food Truck Generator Calculator, plan commercial kitchen electrical loads, and connect with commercial food truck builders for quotes.">
+  <meta name="keywords" content="Food Truck Generator Calculator, Commercial Food Truck Builders, Food Truck Kitchen Planning">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Food Truck Generator Calculator | Mobile Kitchen Hub">
+  <meta property="og:description" content="Plan your mobile kitchen power needs and request quotes from commercial food truck builders.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mobilekitchenhub.com/">
+  <link rel="canonical" href="https://mobilekitchenhub.com/">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HBCHF5BBR2"></script>
+  <script data-mkh-analytics>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-HBCHF5BBR2",{send_page_view:true});</script>
+  <style>
+    :root { --ink:#17221b; --muted:#5e6d63; --paper:#fbfaf5; --card:#fff; --line:#dce3dc; --green:#174f35; --green2:#276b4b; --orange:#ee7b31; --cream:#f3ead6; --shadow:0 18px 50px rgba(23,79,53,.12); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    a { color:inherit; }
+    .wrap { width:min(1120px,calc(100% - 32px)); margin:auto; }
+    header { position:sticky; top:0; z-index:10; background:rgba(251,250,245,.94); border-bottom:1px solid var(--line); backdrop-filter:blur(12px); }
+    nav { min-height:70px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .brand { font-weight:900; letter-spacing:-.04em; font-size:1.15rem; text-decoration:none; }
+    .brand span { color:var(--orange); }
+    .nav-links { display:flex; align-items:center; flex-wrap:wrap; gap:18px; }
+    .nav-link { font-weight:750; color:var(--green); text-underline-offset:4px; }
+    .hero { padding:88px 0 62px; background:radial-gradient(circle at 85% 10%,#f8d4b8 0,transparent 28%),linear-gradient(145deg,#f7f0df,#fbfaf5 60%); }
+    .eyebrow { color:var(--green2); font-weight:850; text-transform:uppercase; letter-spacing:.12em; font-size:.78rem; }
+    h1 { max-width:900px; margin:12px 0 20px; font-size:clamp(2.5rem,7vw,5.5rem); line-height:.98; letter-spacing:-.06em; }
+    .lede { max-width:720px; font-size:clamp(1.05rem,2vw,1.3rem); color:var(--muted); }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+    .button { display:inline-flex; justify-content:center; align-items:center; min-height:48px; padding:0 20px; border:0; border-radius:999px; font:inherit; font-weight:850; text-decoration:none; cursor:pointer; transition:.2s ease; }
+    .button:hover { transform:translateY(-2px); }
+    .button-primary { color:white; background:var(--orange); box-shadow:0 10px 25px rgba(238,123,49,.25); }
+    .button-secondary { color:var(--green); border:1px solid var(--green); background:transparent; }
+    .benefits { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; padding:45px 0 75px; }
+    .benefit { padding:24px; background:var(--card); border:1px solid var(--line); border-radius:18px; }
+    .benefit b { display:block; margin-bottom:5px; color:var(--green); font-size:1.05rem; }
+    .section { padding:78px 0; }
+    .section-heading { max-width:720px; margin-bottom:30px; }
+    h2 { margin:8px 0; font-size:clamp(2rem,4vw,3.2rem); line-height:1.08; letter-spacing:-.045em; }
+    .calculator { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(300px,.6fr); gap:24px; align-items:start; }
+    .result-bridge { margin-top:20px; padding:18px; border-radius:16px; background:#fff8ef; color:var(--ink); border:1px solid #f3cda9; }
+    .result-bridge strong { display:block; margin-bottom:6px; font-size:1.05rem; }
+    .result-bridge .button { width:100%; margin-top:12px; }
+    .result-bridge .button[aria-disabled="true"] { opacity:.55; pointer-events:none; }
+    .brief-note { padding:14px 16px; margin:0 0 20px; border-left:4px solid var(--orange); background:#fff8ef; border-radius:8px; }
+    .panel { background:var(--card); border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); padding:clamp(20px,4vw,34px); }
+    fieldset { border:0; padding:0; margin:0; min-width:0; }
+    legend { margin-bottom:14px; font-size:1.15rem; font-weight:900; }
+    .appliances { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .appliance { position:relative; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px; padding:13px; border:1px solid var(--line); border-radius:12px; cursor:pointer; transition:.15s ease; }
+    .appliance:hover,.appliance:has(input:checked) { border-color:var(--green2); background:#f0f7f2; }
+    .appliance input { width:18px; height:18px; accent-color:var(--green); }
+    .watts { white-space:nowrap; color:var(--muted); font-size:.88rem; font-weight:750; }
+    .margins { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+    .radio { flex:1; min-width:185px; display:flex; gap:9px; align-items:center; padding:13px; border:1px solid var(--line); border-radius:12px; cursor:pointer; }
+    .radio input { accent-color:var(--green); }
+    .results { position:sticky; top:94px; color:white; background:var(--green); }
+    .metric { padding:18px 0; border-bottom:1px solid rgba(255,255,255,.2); }
+    .metric:last-of-type { border:0; }
+    .metric-label { color:#cce0d4; font-size:.88rem; }
+    .metric-value { display:block; margin-top:2px; font-size:clamp(2rem,4vw,3rem); font-weight:900; letter-spacing:-.05em; }
+    .note { font-size:.85rem; color:#cce0d4; }
+    .lead-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .field { display:flex; flex-direction:column; gap:6px; }
+    .field label { font-size:.9rem; font-weight:800; }
+    input[type="text"],input[type="email"],input[type="number"],input[type="date"],select { width:100%; min-height:48px; border:1px solid #b9c4bb; border-radius:10px; padding:10px 12px; color:var(--ink); background:white; font:inherit; }
+    input:focus,select:focus { outline:3px solid rgba(238,123,49,.25); border-color:var(--orange); }
+    .country-note { margin:0; padding:13px 15px; border-radius:12px; background:#f0f7f2; color:var(--green); font-size:.9rem; }
+    .full { grid-column:1/-1; }
+    .consent { display:grid; grid-template-columns:auto 1fr; align-items:start; gap:9px; font-size:.85rem; color:var(--muted); }
+    .consent input { margin-top:5px; accent-color:var(--green); }
+    #formStatus { min-height:25px; margin:10px 0 0; font-weight:750; }
+    #formStatus[data-kind="error"] { color:#a23223; }
+    #formStatus[data-kind="success"] { color:var(--green); }
+    .how { background:var(--cream); }
+    .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; counter-reset:step; }
+    .resources { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .resource { display:flex; flex-direction:column; padding:24px; background:var(--card); border:1px solid var(--line); border-radius:18px; }
+    .resource h3 { margin:8px 0; font-size:1.25rem; line-height:1.2; }
+    .resource a { margin-top:auto; color:var(--green); font-weight:850; text-underline-offset:4px; }
+    .step { padding:24px; background:rgba(255,255,255,.7); border-radius:18px; counter-increment:step; }
+    .step:before { content:counter(step); display:grid; place-items:center; width:34px; height:34px; margin-bottom:14px; border-radius:50%; color:white; background:var(--orange); font-weight:900; }
+    footer { padding:38px 0; border-top:1px solid var(--line); color:var(--muted); font-size:.9rem; }
+    footer a, .consent a { color:inherit; text-decoration:underline; text-underline-offset:3px; }
+    @media (max-width:800px) { .benefits,.steps,.resources,.calculator { grid-template-columns:1fr; } .results { position:static; } .appliances { grid-template-columns:1fr; } }
+    @media (max-width:720px) { .hero { padding-top:58px; } .lead-grid { grid-template-columns:1fr; } .full { grid-column:auto; } .nav-links .nav-link:not(:first-child) { display:none; } }
+  </style>
+</head>
+<body>
+  <header><nav class="wrap" aria-label="Main navigation"><a class="brand" href="#top">MobileKitchen<span>Hub</span></a><div class="nav-links"><a class="nav-link" href="#calculator">Power Calculator</a><a class="nav-link" href="/cities">City Hubs</a><a class="nav-link" href="/builders/texas">Texas Builders</a><a class="nav-link" href="/builders/uk">UK Builders</a><a class="nav-link" href="/directory">Directory</a><a class="nav-link" href="/partners">Partner Network</a></div></nav></header>
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <div class="eyebrow">Plan power. Build with confidence.</div>
+        <h1>Size your food truck power before you build.</h1>
+        <p class="lede">Estimate your kitchen's electrical load, choose a practical generator range, and prepare a clearer brief for commercial food truck builders—all in one place.</p>
+        <div class="actions"><a class="button button-primary" href="#calculator">Calculate my power needs</a><a class="button button-secondary" href="#how-it-works">How it works</a></div>
+      </div>
+    </section>
+
+    <section class="wrap benefits" aria-label="Why use Mobile Kitchen Hub">
+      <div class="benefit"><b>Avoid undersizing</b>See the combined running load of the equipment on your list before requesting generator quotes.</div>
+      <div class="benefit"><b>Plan with a safety margin</b>Compare a standard 20% buffer with a 35% high-duty buffer for demanding operations.</div>
+      <div class="benefit"><b>Talk to builders clearly</b>Turn your equipment choices into a simple power brief you can share with commercial builders.</div>
+    </section>
+
+    <section class="section" id="calculator">
+      <div class="wrap">
+        <div class="section-heading"><div class="eyebrow">Free planning tool</div><h2>Food Truck Power &amp; Generator Size Calculator</h2><p>Select every appliance you expect to run. Your estimate updates instantly.</p></div>
+        <div class="calculator">
+          <div class="panel">
+            <div class="field" style="margin-bottom:24px"><label for="country">Country / market</label><select id="country" name="country"><option value="US">United States</option><option value="CA">Canada</option><option value="GB">United Kingdom</option><option value="IE">Ireland</option><option value="AU">Australia</option><option value="EU">European Union</option></select><p class="country-note" id="electricalProfile">Typical supply: 120/240V, 60Hz. Confirm the available service for your vehicle and site.</p></div>
+            <fieldset><legend>1. Select your equipment</legend>
+              <div class="appliances" id="applianceList"></div>
+            </fieldset>
+            <fieldset class="margins"><legend class="full">2. Choose a safety margin</legend>
+              <label class="radio"><input type="radio" name="margin" value="1.2" checked><span><b>Standard 20%</b><br><small>Typical planning buffer</small></span></label>
+              <label class="radio"><input type="radio" name="margin" value="1.35"><span><b>High-Duty 35%</b><br><small>Extra headroom</small></span></label>
+            </fieldset>
+          </div>
+          <aside class="panel results" aria-live="polite">
+            <div class="eyebrow" style="color:#ffd6b9">Your estimate</div>
+            <div class="metric"><span class="metric-label">Total running watts</span><output class="metric-value" id="runningWatts">0 W</output></div>
+            <div class="metric"><span class="metric-label">Recommended generator size</span><output class="metric-value" id="generatorSize">0.0 kW</output></div>
+            <p id="marginSummary">Includes a 20% safety margin.</p>
+            <p class="note">Planning estimate only. Appliance ratings vary by country and model. Confirm startup surge, voltage, frequency, phase, fuel, local codes, and manufacturer requirements with a qualified local electrician and generator supplier.</p>
+            <div class="result-bridge" id="resultBridge"><strong id="bridgeHeadline">Select your equipment to create a project brief.</strong><span id="bridgeCopy">Your chosen appliances and power estimate will be carried into the enquiry automatically.</span><a class="button button-primary" id="quoteBridgeButton" href="#quote-request" aria-disabled="true">Get Quotes from Regional Fabricators</a></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="quote-request" style="padding-top:0">
+      <div class="wrap panel">
+        <div class="section-heading"><div class="eyebrow">Next step</div><h2>Share your structured project brief</h2><p>Connect with regional fabricators or participating builders who may serve your area.</p></div>
+        <p class="brief-note"><strong>Your calculator work is already included.</strong> We will attach the selected equipment, running load, safety margin and recommended generator size to your enquiry.</p>
+        <form id="leadForm" novalidate>
+          <div class="lead-grid">
+            <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+            <div class="field"><label for="customAppliance">Other specialty equipment</label><input id="customAppliance" name="customAppliance" type="text" placeholder="e.g. soft-serve machine"></div>
+            <div class="field"><label for="customWatts">Manufacturer-rated running watts</label><input id="customWatts" name="customWatts" type="number" min="0" step="50" inputmode="numeric" placeholder="e.g. 2400"></div>
+            <div class="field full"><label for="state" id="locationLabel">State / location</label><input id="state" name="state" type="text" autocomplete="address-level1" placeholder="e.g. CA, TX, FL" required></div>
+            <div class="field"><label for="projectStage">Project stage</label><select id="projectStage" name="projectStage" required><option value="">Choose a stage</option><option>Researching options</option><option>Ready for quotations</option><option>Vehicle selected</option><option>Build already underway</option></select></div>
+            <div class="field"><label for="vehicleSize">Vehicle or trailer size</label><input id="vehicleSize" name="vehicleSize" type="text" placeholder="e.g. 18 ft trailer"></div>
+            <div class="field"><label for="budget">Estimated budget</label><select id="budget" name="budget" required><option value="">Choose a budget</option><option>Under 25,000</option><option>25,000–50,000</option><option>50,000–100,000</option><option>100,000+</option><option>Not decided</option></select></div>
+            <div class="field"><label for="targetDate">Target completion date</label><input id="targetDate" name="targetDate" type="date"></div>
+            <label class="consent full"><input name="consent" type="checkbox" required><span>I agree that Mobile Kitchen Hub may use my details to respond to this request and share them with relevant regional fabricators or participating builders. See our <a href="/privacy-policy">privacy policy</a> for details.</span></label>
+            <div class="full"><button class="button button-primary" id="submitButton" type="submit">Share My Project Brief</button><p id="formStatus" role="status" aria-live="polite"></p></div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section how" id="how-it-works"><div class="wrap"><div class="section-heading"><div class="eyebrow">A better build brief</div><h2>From equipment list to builder conversation</h2></div><div class="steps"><div class="step"><b>Select your appliances</b><p>Choose the commercial equipment you expect to operate in your mobile kitchen.</p></div><div class="step"><b>Review your estimate</b><p>Compare running watts and a generator recommendation with your chosen safety margin.</p></div><div class="step"><b>Share your brief</b><p>Submit the structured brief for matching with regional fabricators or participating builders.</p></div></div></div></section>
+    <section class="section" id="guides"><div class="wrap"><div class="section-heading"><div class="eyebrow">Planning guides</div><h2>Build your mobile kitchen brief</h2><p>Use these practical introductions to prepare better questions for your electrician, fire-suppression contractor, equipment suppliers, and builder.</p></div><div class="resources"><article class="resource"><div class="eyebrow">Power planning</div><h3>What size generator does a food truck need?</h3><p>Estimate running load, account for motor startup, and understand why voltage and phase matter.</p><a href="food-truck-generator-sizing-guide.html">Read the generator guide →</a></article><article class="resource"><div class="eyebrow">Electrical service</div><h3>50-amp vs. 100-amp food truck panels</h3><p>Compare service capacity, shore power, load management, and questions to ask before wiring begins.</p><a href="food-truck-electrical-panel-guide.html">Compare panel sizes →</a></article><article class="resource"><div class="eyebrow">Ventilation</div><h3>Food truck hood and fire-suppression basics</h3><p>Learn the planning difference between grease-producing and heat or steam equipment.</p><a href="food-truck-hood-ventilation-guide.html">Read the ventilation guide →</a></article></div></div></section>
+    <section class="section"><div class="wrap"><div class="section-heading"><div class="eyebrow">Free resources</div><h2>More planning tools</h2><p>Prepare your build brief before speaking with fabricators and inspectors.</p></div><div class="resources"><article class="resource"><div class="eyebrow">Printable resource</div><h3>Build and inspection checklist</h3><p>Organize equipment, utilities, approvals and handover documents.</p><a href="/resources/build-checklist">Open the checklist →</a></article><article class="resource"><div class="eyebrow">Early estimate</div><h3>Interior materials estimator</h3><p>Estimate surface areas, sheet quantities, insulation and indicative framing.</p><a href="/tools/materials-estimator">Estimate materials →</a></article><article class="resource"><div class="eyebrow">For fabricators</div><h3>Builder partner network</h3><p>Review structured lead and featured-city placement options.</p><a href="/partners">View partner options →</a></article></div></div></section><section class="section" id="privacy"><div class="wrap"><div class="section-heading"><div class="eyebrow">Privacy</div><h2>How we use your information</h2><p>When you share a project brief, Mobile Kitchen Hub collects the name, email address, location, equipment selections, and calculator estimate you submit. We use this information to respond to your request, manage it in our lead database, and share it with relevant regional fabricators or participating builders so they can contact you about your project. Our service providers—including Netlify, Make, Airtable, and Google—may process this information to host the site, route submissions, store requests, and deliver notifications. We do not sell your information for unrelated marketing. To request access, correction, or deletion of your submission, email <a href="mailto:automationlabstudio26@gmail.com">automationlabstudio26@gmail.com</a>.</p></div></div></section>
+  </main>
+  <footer><div class="wrap">© <span id="year"></span> Mobile Kitchen Hub. Calculator results are preliminary planning estimates, not electrical engineering advice. · <a href="/cities">Cities</a> · <a href="#guides">Guides</a> · <a href="/directory">Directory</a> · <a href="/partners">Partners</a> · <a href="/contact">Contact</a> · <a href="/privacy-policy">Privacy</a></div></footer>
+
+  <script>
+    const WEBHOOK_URL = "https://hook.eu1.make.com/q8yytn5mvqwzdegwr4vwm4amz48yrcw2";
+    function track(eventName, details = {}) {
+      const event = { event:eventName, page_path:location.pathname, ...details };
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(event);
+      window.dispatchEvent(new CustomEvent("mkh:analytics", { detail:event }));
+    }
+    const markets = {
+      US:{name:"United States",supply:"120/240V, 60Hz",locationLabel:"State / location",placeholder:"e.g. CA, TX, FL",currency:"USD"},
+      CA:{name:"Canada",supply:"120/240V, 60Hz",locationLabel:"Province / location",placeholder:"e.g. Ontario, Alberta, BC",currency:"CAD"},
+      GB:{name:"United Kingdom",supply:"230/400V, 50Hz",locationLabel:"Postcode / region",placeholder:"e.g. London, Manchester, SW1A",currency:"GBP"},
+      IE:{name:"Ireland",supply:"230/400V, 50Hz",locationLabel:"County / Eircode",placeholder:"e.g. Dublin, Cork, D02",currency:"EUR"},
+      AU:{name:"Australia",supply:"230/400V, 50Hz",locationLabel:"State / postcode",placeholder:"e.g. VIC 3000, NSW 2000",currency:"AUD"},
+      EU:{name:"European Union",supply:"230/400V, 50Hz",locationLabel:"Country / region / postcode",placeholder:"e.g. France — Paris 75001",currency:"EUR"}
+    };
+    const appliances = [
+      ["Commercial Double Deep Fryer",4800],["Flat-Top Commercial Griddle",6000],["Commercial Espresso Machine",3800],
+      ["High-Speed Countertop Oven",3200],["Under-Counter Prep Fridge",600],["Stand-up Commercial Freezer",800],
+      ["Ice Machine",1000],["Commercial Hood Exhaust Fan System",1200],["Rooftop AC Unit",1800],
+      ["On-Demand Electric Water Heater",3000],["Water Pump",300]
+    ];
+    const list = document.getElementById("applianceList");
+    appliances.forEach(([name,watts],index) => {
+      const label = document.createElement("label"); label.className = "appliance";
+      label.innerHTML = `<input class="appliance-input" type="checkbox" value="${watts}" data-name="${name}" id="appliance-${index}"><span>${name}</span><span class="watts">${watts.toLocaleString()} W</span>`;
+      list.appendChild(label);
+    });
+    const checked = () => [...document.querySelectorAll(".appliance-input:checked")];
+    const country = document.getElementById("country"), locationInput = document.getElementById("state");
+    function updateMarket() {
+      const market = markets[country.value];
+      document.getElementById("electricalProfile").textContent = `Typical supply: ${market.supply}. Confirm the available service for your vehicle and site.`;
+      document.getElementById("locationLabel").textContent = market.locationLabel;
+      locationInput.placeholder = market.placeholder;
+    }
+    function totals() {
+      const customWatts = Math.max(0,Number(document.getElementById("customWatts")?.value || 0));
+      const running = checked().reduce((sum,input) => sum + Number(input.value),0) + customWatts;
+      const multiplier = Number(document.querySelector('input[name="margin"]:checked').value);
+      const recommended = running * multiplier;
+      document.getElementById("runningWatts").textContent = `${running.toLocaleString()} W`;
+      document.getElementById("generatorSize").textContent = `${(recommended/1000).toFixed(1)} kW`;
+      document.getElementById("marginSummary").textContent = `Includes a ${Math.round((multiplier-1)*100)}% safety margin.`;
+      const bridgeButton = document.getElementById("quoteBridgeButton");
+      bridgeButton.setAttribute("aria-disabled", running === 0 ? "true" : "false");
+      document.getElementById("bridgeHeadline").textContent = running === 0 ? "Select your equipment to create a project brief." : `Calculated ${(recommended/1000).toFixed(1)} kW? Turn it into a builder-ready brief.`;
+      document.getElementById("bridgeCopy").textContent = running === 0 ? "Your chosen appliances and power estimate will be carried into the enquiry automatically." : "Reduce the risk of electrical overload and avoidable approval delays by sharing this equipment list with regional fabricators or participating builders.";
+      return { runningWatts:running, safetyMarginPercent:Math.round((multiplier-1)*100), recommendedGeneratorKw:Number((recommended/1000).toFixed(1)) };
+    }
+    let calculatorStarted = false;
+    document.querySelectorAll('.appliance-input,input[name="margin"]').forEach(input => input.addEventListener("change",event => {
+      if (!calculatorStarted) {
+        calculatorStarted = true;
+        track("calculator_started", { country_code:country.value });
+      }
+      const currentTotals = totals();
+      if (event.target.classList.contains("appliance-input")) {
+        track("appliance_selected", {
+          appliance:event.target.dataset.name,
+          selected:event.target.checked,
+          running_watts:currentTotals.runningWatts,
+          country_code:country.value
+        });
+      }
+    }));
+    document.getElementById("customWatts").addEventListener("input",totals);
+    country.addEventListener("change",() => {
+      updateMarket();
+      track("market_changed", { country_code:country.value, electrical_standard:markets[country.value].supply });
+    });
+    const form = document.getElementById("leadForm"), status = document.getElementById("formStatus"), button = document.getElementById("submitButton");
+    let quoteFormStarted = false;
+    form.addEventListener("input",() => {
+      if (quoteFormStarted) return;
+      quoteFormStarted = true;
+      track("quote_form_started", { country_code:country.value });
+    });
+    form.addEventListener("submit",async event => {
+      event.preventDefault(); status.textContent = ""; status.dataset.kind = "";
+      const currentTotals = totals();
+      if (currentTotals.runningWatts === 0) {
+        const validationMessage = "Please select at least one appliance to calculate your power brief.";
+        status.textContent = validationMessage;
+        status.dataset.kind = "error";
+        track("lead_validation_failed", { reason:"no_appliances_selected", country_code:country.value });
+        alert(validationMessage);
+        document.getElementById("calculator").scrollIntoView({behavior:"smooth",block:"start"});
+        document.getElementById("appliance-0").focus({preventScroll:true});
+        return;
+      }
+      if (!form.reportValidity()) return;
+      track("calculation_completed", { ...currentTotals, country_code:country.value });
+      if (!WEBHOOK_URL.startsWith("https://")) {
+        status.textContent = "Lead dispatch is not connected yet. Add your Make.com webhook URL to enable submissions."; status.dataset.kind = "error"; return;
+      }
+      const data = new FormData(form), selected = checked().map(input => ({name:input.dataset.name,watts:Number(input.value)}));
+      const customWatts = Math.max(0,Number(data.get("customWatts") || 0));
+      if (customWatts > 0) selected.push({name:data.get("customAppliance").trim() || "Other specialty equipment",watts:customWatts});
+      const selectedCountry = country.value;
+      const market = markets[selectedCountry];
+      const location = data.get("state").trim();
+      const payload = { name:data.get("name"), email:data.get("email"), customAppliance:data.get("customAppliance").trim(), customWatts, projectStage:data.get("projectStage"), vehicleSize:data.get("vehicleSize").trim(), budget:data.get("budget"), targetDate:data.get("targetDate"), state:`${market.name} — ${location}`, countryCode:selectedCountry, country:market.name, location, electricalStandard:market.supply, currencyCode:market.currency, consent:true, ...totals(), appliances:selected, source:"MobileKitchenHub.com", submittedAt:new Date().toISOString() };
+      button.disabled = true; button.textContent = "Sending…";
+      try {
+        const equipmentText = [
+          ...payload.appliances.map(item => `${item.name} (${item.watts.toLocaleString()} W)`),
+          ...(payload.customAppliance && payload.customWatts === 0 ? [`Other specialty equipment / notes: ${payload.customAppliance}`] : [])
+        ].join("\n");
+        const webhookBody = new URLSearchParams({
+          ...payload,
+          consent:String(payload.consent),
+          runningWatts:String(payload.runningWatts),
+          safetyMarginPercent:String(payload.safetyMarginPercent),
+          recommendedGeneratorKw:String(payload.recommendedGeneratorKw),
+          appliances:equipmentText,
+          appliancesJson:JSON.stringify(payload.appliances),
+          appliancesText:equipmentText,
+          projectStage:payload.projectStage,
+          vehicleSize:payload.vehicleSize,
+          budget:payload.budget,
+          targetDate:payload.targetDate,
+          customWatts:String(payload.customWatts)
+        });
+        const response = await fetch(WEBHOOK_URL,{method:"POST",body:webhookBody,mode:"no-cors"});
+        if (response.type !== "opaque" && !response.ok) throw new Error(`Submission failed (${response.status})`);
+        form.reset(); updateMarket(); totals(); status.textContent = "Thank you—your request was sent for processing."; status.dataset.kind = "success";
+        track("lead_submitted", { country_code:selectedCountry, running_watts:payload.runningWatts, recommended_generator_kw:payload.recommendedGeneratorKw, appliance_count:payload.appliances.length });
+      } catch (error) {
+        status.textContent = "We couldn't send your request. Please try again or contact us directly."; status.dataset.kind = "error";
+        track("lead_submission_failed", { country_code:selectedCountry });
+      } finally { button.disabled = false; button.textContent = "Share My Project Brief"; }
+    });
+    document.getElementById("quoteBridgeButton").addEventListener("click",event => {
+      const currentTotals = totals();
+      if (currentTotals.runningWatts === 0) {
+        event.preventDefault();
+        document.getElementById("calculator").scrollIntoView({behavior:"smooth",block:"start"});
+        document.getElementById("appliance-0").focus({preventScroll:true});
+        return;
+      }
+      track("quote_bridge_clicked", { ...currentTotals, country_code:country.value, appliance_count:checked().length });
+    });
+    document.addEventListener("click",event => {
+      const link = event.target.closest("a");
+      if (!link) return;
+      const href = link.getAttribute("href") || "";
+      if (href.includes("#calculator") || href.includes("#how-it-works") || href.includes("/directory") || href.includes("/partners")) {
+        track("cta_clicked", { cta_text:link.textContent.trim(), destination:href });
+      }
+    });
+    const requestedCity = new URLSearchParams(location.search).get("city");
+    if (requestedCity) locationInput.value = requestedCity.slice(0,80);
+    document.getElementById("year").textContent = new Date().getFullYear(); updateMarket(); totals();
+  </script>
+</body>
+</html>
