@@ -110,6 +110,20 @@
       <div class="benefit"><b>Talk to builders clearly</b>Turn your equipment choices into a simple power brief you can share with commercial builders.</div>
     </section>
 
+    <section class="section" aria-labelledby="popular-cities-title">
+      <div class="wrap">
+        <div class="section-heading"><div class="eyebrow">Local planning hubs</div><h2 id="popular-cities-title">Plan your mobile kitchen by city</h2><p>Review local operating context, electrical standards, official guidance and regional fabricator options before requesting quotes.</p></div>
+        <div class="resources">
+          <article class="resource"><div class="eyebrow">United Kingdom</div><h3>London</h3><p>Plan for borough trading rules, ULEZ logistics and 230/400V, 50Hz electrical systems.</p><a href="/cities/uk/london">Open the London planning hub →</a></article>
+          <article class="resource"><div class="eyebrow">United States</div><h3>New York City</h3><p>Prepare for local mobile-food-vendor licensing, compact layouts and 120/240V, 60Hz power.</p><a href="/cities/us/new-york">Open the New York planning hub →</a></article>
+          <article class="resource"><div class="eyebrow">United States</div><h3>Miami</h3><p>Account for continuous refrigeration, air-conditioning demand and Florida plan review.</p><a href="/cities/us/miami">Open the Miami planning hub →</a></article>
+          <article class="resource"><div class="eyebrow">Australia</div><h3>Sydney</h3><p>Review council approvals, hot-weather cooling loads and 230/400V, 50Hz supply.</p><a href="/cities/au/sydney">Open the Sydney planning hub →</a></article>
+          <article class="resource"><div class="eyebrow">Australia</div><h3>Melbourne</h3><p>Plan for FoodTrader registration, market operations and rapidly changing weather.</p><a href="/cities/au/melbourne">Open the Melbourne planning hub →</a></article>
+          <article class="resource"><div class="eyebrow">All locations</div><h3>Explore 35 city hubs</h3><p>Browse mobile-kitchen planning guides across North America, Europe, the UK, Ireland and Australia.</p><a href="/cities">View every city planning hub →</a></article>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="calculator">
       <div class="wrap">
         <div class="section-heading"><div class="eyebrow">Free planning tool</div><h2>Food Truck Power &amp; Generator Size Calculator</h2><p>Select every appliance you expect to run. Your estimate updates instantly.</p></div>
@@ -312,7 +326,7 @@
       const link = event.target.closest("a");
       if (!link) return;
       const href = link.getAttribute("href") || "";
-      if (href.includes("#calculator") || href.includes("#how-it-works") || href.includes("/directory") || href.includes("/partners")) {
+      if (href.includes("#calculator") || href.includes("#how-it-works") || href.includes("/cities") || href.includes("/directory") || href.includes("/partners")) {
         track("cta_clicked", { cta_text:link.textContent.trim(), destination:href });
       }
     });
