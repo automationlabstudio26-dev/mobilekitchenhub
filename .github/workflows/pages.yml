@@ -1,0 +1,56 @@
+name: Deploy Mobile Kitchen Hub to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out website
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build static site with clean routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          find . -maxdepth 1 -type f \( -name '*.html' -o -name '*.css' -o -name '*.xml' -o -name '*.txt' \) -exec cp {} _site/ \;
+          cp robots.txt _site/robots.txt
+          touch _site/.nojekyll
+          while read -r route target status; do
+            case "$route" in ""|"#"*) continue ;; esac
+            [ "${status:-}" = "200" ] || [ "${status:-}" = "302" ] || continue
+            source_file="${target#/}"
+            source_file="${source_file%%#*}"
+            [ -f "$source_file" ] || continue
+            destination="_site${route}"
+            mkdir -p "$destination"
+            cp "$source_file" "$destination/index.html"
+          done < _redirects
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
