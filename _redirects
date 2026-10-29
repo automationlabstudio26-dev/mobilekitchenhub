@@ -5,6 +5,7 @@
 /builders/uk           /uk-builders.html                       200
 /builders/california   /california-builders.html               200
 /builders/florida      /florida-builders.html                  200
+/builders/melbourne-food-trailer-builders /melbourne-food-trailer-builders.html 200
 /equipment/commercial-fryers /commercial-fryers.html           200
 /equipment/rooftop-ac  /rooftop-ac.html                        200
 /equipment/hood-exhaust /hood-exhaust.html                     200
@@ -30,6 +31,9 @@
 /cities/us/chicago /city-us-chicago.html 200
 /cities/us/houston /city-us-houston.html 200
 /cities/us/miami /city-us-miami.html 200
+/cities/us/dallas-fort-worth /city-us-dallas-fort-worth.html 200
+/cities/us/atlanta /city-us-atlanta.html 200
+/cities/us/austin /city-us-austin.html 200
 /cities/ca/toronto /city-ca-toronto.html 200
 /cities/ca/vancouver /city-ca-vancouver.html 200
 /cities/ca/calgary /city-ca-calgary.html 200
