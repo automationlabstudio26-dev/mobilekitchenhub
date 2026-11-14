@@ -118,11 +118,11 @@
     footer { padding:38px 0; border-top:1px solid var(--line); color:var(--muted); font-size:.9rem; }
     footer a, .consent a { color:inherit; text-decoration:underline; text-underline-offset:3px; }
     @media (max-width:800px) { .benefits,.steps,.resources,.calculator { grid-template-columns:1fr; } .results { position:static; } .appliances { grid-template-columns:1fr; } }
-    @media (max-width:720px) { .hero { padding-top:58px; } .lead-grid { grid-template-columns:1fr; } .full { grid-column:auto; } .nav-links .nav-link:not(:first-child) { display:none; } }
+    @media (max-width:720px) { .hero { padding-top:58px; } .lead-grid { grid-template-columns:1fr; } .full { grid-column:auto; } .nav-links { max-width:68vw; overflow-x:auto; flex-wrap:nowrap; } .nav-link { white-space:nowrap; } }
   </style>
 <link rel="icon" href="/blueprint-truck-icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/blueprint-truck-icon.svg"><style>.brand{display:inline-flex;align-items:center;gap:10px}.brand-icon{display:block;width:44px;height:44px;flex:0 0 44px;border-radius:10px}.brand-name{color:var(--ink)}.brand-name span{color:var(--orange)}</style></head>
 <body>
-  <header><nav class="wrap" aria-label="Main navigation"><a class="brand" href="#top" aria-label="Mobile Kitchen Hub home"><img class="brand-icon" src="/blueprint-truck-icon.svg" alt=""><span class="brand-name">MobileKitchen<span>Hub</span></span></a><div class="nav-links"><a class="nav-link" href="#calculator">Power Calculator</a><a class="nav-link" href="/guides/mobile-kitchens-for-sale/">Kitchens for Sale</a><a class="nav-link" href="/calculators/food-truck-profit-break-even/">Break-Even</a><a class="nav-link" href="/calculators/mobile-kitchen-build-cost-budget/">Build Budget</a><a class="nav-link" href="/cities/">City Hubs</a><a class="nav-link" href="/directory/">Directory</a></div></nav></header>
+  <header><nav class="wrap" aria-label="Main navigation"><a class="brand" href="#top" aria-label="Mobile Kitchen Hub home"><img class="brand-icon" src="/blueprint-truck-icon.svg" alt=""><span class="brand-name">MobileKitchen<span>Hub</span></span></a><div class="nav-links"><a class="nav-link" href="#calculator">Calculators</a><a class="nav-link" href="/cities/">City Hubs</a><a class="nav-link" href="#guides">Equipment Guides</a><a class="nav-link" href="/partners/">For Builders</a></div></nav></header>
   <main id="top">
     <section class="hero">
       <div class="wrap">
@@ -390,9 +390,22 @@
         track("cta_clicked", { cta_text:link.textContent.trim(), destination:href });
       }
     });
-    const requestedCity = new URLSearchParams(location.search).get("city");
+    const queryParams = new URLSearchParams(location.search);
+    const requestedCity = queryParams.get("city");
     if (requestedCity) locationInput.value = requestedCity.slice(0,80);
+    const requestedStage = queryParams.get("projectStage");
+    if (requestedStage && [...projectStage.options].some(option => option.value === requestedStage)) projectStage.value = requestedStage;
+    const requestedVehicle = queryParams.get("vehicle");
+    if (requestedVehicle) vehicleSize.value = requestedVehicle.slice(0,80);
+    const preselected = (queryParams.get("preselect") || "").toLowerCase().split(",").filter(Boolean);
+    const preselectTerms = {fryer:"fryer",griddle:"griddle",espresso:"espresso",refrigeration:"refriger",ac:"air conditioner",hood:"hood"};
+    preselected.forEach(key => {
+      const term = preselectTerms[key];
+      const item = appliances.findIndex(appliance => term && appliance[0].toLowerCase().includes(term));
+      if (item >= 0) document.getElementById(`appliance-${item}`).checked = true;
+    });
     document.getElementById("year").textContent = new Date().getFullYear(); updateMarket(); totals();
   </script>
+  <script defer src="/site-tracking.js"></script>
 </body>
 </html>
