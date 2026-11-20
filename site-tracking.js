@@ -1,5 +1,33 @@
 (function () {
   const path = window.location.pathname;
+  const attributionKey = "mkh_attribution_v1";
+  const attributionFields = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+
+  function captureAttribution() {
+    const params = new URLSearchParams(window.location.search);
+    const campaign = Object.fromEntries(attributionFields.map(function (field) {
+      return [field, (params.get(field) || "").slice(0, 200)];
+    }));
+    const hasCampaign = attributionFields.some(function (field) { return campaign[field]; });
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem(attributionKey) || "{}"); } catch (_) { stored = {}; }
+
+    if (hasCampaign) {
+      const touch = {
+        ...campaign,
+        landing_page: window.location.href,
+        referrer: document.referrer,
+        captured_at: new Date().toISOString()
+      };
+      stored = {
+        first_touch: stored.first_touch || touch,
+        last_touch: touch
+      };
+      try { localStorage.setItem(attributionKey, JSON.stringify(stored)); } catch (_) {}
+    }
+
+    window.mkhAttribution = stored;
+  }
 
   function sendEvent(name, parameters) {
     const details = { page_path: window.location.pathname, ...parameters };
@@ -89,6 +117,7 @@
   }
 
   function init() {
+    captureAttribution();
     enhanceNavigation();
     addCityQuickSpec();
     addNewResourceCards();
