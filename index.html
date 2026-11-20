@@ -78,6 +78,7 @@
     .form-step[hidden] { display:none; }
     .step-actions { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
     .form-disclaimer { margin:14px 0 0; color:#5c6863; font-size:.88rem; line-height:1.55; }
+    .mobile-brief-bar { display:none; }
     .panel { background:var(--card); border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); padding:clamp(20px,4vw,34px); }
     fieldset { border:0; padding:0; margin:0; min-width:0; }
     legend { margin-bottom:14px; font-size:1.15rem; font-weight:900; }
@@ -118,7 +119,19 @@
     footer { padding:38px 0; border-top:1px solid var(--line); color:var(--muted); font-size:.9rem; }
     footer a, .consent a { color:inherit; text-decoration:underline; text-underline-offset:3px; }
     @media (max-width:800px) { .benefits,.steps,.resources,.calculator { grid-template-columns:1fr; } .results { position:static; } .appliances { grid-template-columns:1fr; } }
-    @media (max-width:720px) { .hero { padding-top:58px; } .lead-grid { grid-template-columns:1fr; } .full { grid-column:auto; } .nav-links { max-width:68vw; overflow-x:auto; flex-wrap:nowrap; } .nav-link { white-space:nowrap; } }
+    @media (max-width:720px) {
+      .hero { padding-top:58px; }
+      .lead-grid { grid-template-columns:1fr; }
+      .full { grid-column:auto; }
+      .nav-links { max-width:68vw; overflow-x:auto; flex-wrap:nowrap; }
+      .nav-link { white-space:nowrap; }
+      body.has-mobile-brief-bar { padding-bottom:calc(84px + env(safe-area-inset-bottom)); }
+      .mobile-brief-bar { position:fixed; z-index:30; right:12px; bottom:calc(12px + env(safe-area-inset-bottom)); left:12px; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 10px 10px 16px; border:1px solid rgba(255,255,255,.2); border-radius:18px; color:white; background:#174f35; box-shadow:0 16px 45px rgba(23,34,27,.32); transform:translateY(calc(130% + env(safe-area-inset-bottom))); opacity:0; pointer-events:none; transition:transform .2s ease,opacity .2s ease; }
+      .mobile-brief-bar.is-visible { transform:translateY(0); opacity:1; pointer-events:auto; }
+      .mobile-brief-bar strong { display:block; font-size:.98rem; line-height:1.15; }
+      .mobile-brief-bar small { display:block; margin-top:2px; color:#cce0d4; font-size:.75rem; }
+      .mobile-brief-bar .button { min-height:44px; padding:0 15px; white-space:nowrap; }
+    }
   </style>
 <link rel="icon" href="/blueprint-truck-icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/blueprint-truck-icon.svg"><style>.brand{display:inline-flex;align-items:center;gap:10px}.brand-icon{display:block;width:44px;height:44px;flex:0 0 44px;border-radius:10px}.brand-name{color:var(--ink)}.brand-name span{color:var(--orange)}</style></head>
 <body>
@@ -217,6 +230,10 @@
     <section class="section section-soft" id="technical-planning-pack"><div class="wrap"><div class="section-heading"><div class="eyebrow">New technical planning pack</div><h2>Plan water, fuel, approvals and a safer purchase</h2><p>Use five focused resources to turn early assumptions into questions and documents for qualified trades, authorities and fabricators.</p></div><div class="resources"><article class="resource"><div class="eyebrow">Water and wastewater</div><h3>Tank and plumbing sizing calculator</h3><p>Estimate fresh water, wastewater, hot-water demand and tank payload.</p><a href="/calculators/food-truck-water-tank-plumbing-sizing/">Size the water system →</a></article><article class="resource"><div class="eyebrow">Propane and LPG</div><h3>Fuel-use and connected-load calculator</h3><p>Estimate shift consumption and prepare a qualified gas-contractor discussion.</p><a href="/calculators/propane-tank-and-btu-calculator/">Estimate propane demand →</a></article><article class="resource"><div class="eyebrow">Plan review</div><h3>Authority document-pack generator</h3><p>Organize drawings, cut sheets, schedules and operating documents.</p><a href="/tools/food-truck-plan-review-pack/">Build the review pack →</a></article><article class="resource"><div class="eyebrow">Commissary</div><h3>Base-kitchen and permit checklist</h3><p>Compare permitted activities, servicing arrangements, costs and contract questions.</p><a href="/guides/commissary-and-health-permit-checklist/">Review commissary needs →</a></article><article class="resource"><div class="eyebrow">Buying used</div><h3>Used food truck inspection checklist</h3><p>Record documents, defects and specialist checks before paying a deposit.</p><a href="/guides/buying-a-used-food-truck-checklist/">Inspect a used unit →</a></article></div></div></section>
     <section class="section"><div class="wrap"><div class="section-heading"><div class="eyebrow">From menu to builder selection</div><h2>Make the next two decisions with a clearer brief</h2><p>Translate the menu into equipment questions, then compare fabricator quotations against the same scope.</p></div><div class="resources"><article class="resource"><div class="eyebrow">Concept planning</div><h3>Menu-to-equipment planner</h3><p>Identify likely cooking, refrigeration, water, ventilation, power and workflow needs.</p><a href="/tools/menu-to-equipment-planner/">Plan from the menu →</a></article><article class="resource"><div class="eyebrow">Procurement</div><h3>Builder quote comparison</h3><p>Compare three quotations by scope, approvals, warranty, lead time, payments and exclusions.</p><a href="/tools/builder-quote-comparison/">Compare builder quotes →</a></article></div></div></section>
   </main>
+  <aside class="mobile-brief-bar" id="mobileBriefBar" aria-live="polite" aria-hidden="true">
+    <span><strong id="mobileBriefResult">Your estimate is ready</strong><small>Free · no obligation</small></span>
+    <a class="button button-primary" id="mobileBriefButton" href="#quote-request">Send brief</a>
+  </aside>
   <footer><div class="wrap">© <span id="year"></span> Mobile Kitchen Hub. Calculator results are preliminary planning estimates, not electrical engineering advice. · <a href="/cities/">Cities</a> · <a href="#guides">Guides</a> · <a href="/directory/">Directory</a> · <a href="/partners/">Partners</a> · <a href="/contact/">Contact</a> · <a href="/privacy-policy/">Privacy</a></div></footer>
 
   <script>
@@ -273,6 +290,10 @@
       bridgeButton.setAttribute("aria-disabled", running === 0 ? "true" : "false");
       document.getElementById("bridgeHeadline").textContent = running === 0 ? "Select your equipment to create a project brief." : `Calculated ${(recommended/1000).toFixed(1)} kW? Turn it into a builder-ready brief.`;
       document.getElementById("bridgeCopy").textContent = running === 0 ? "Your chosen appliances and power estimate will be carried into the enquiry automatically." : "Don't risk electrical overload or avoidable approval delays. Share this exact equipment list with regional fabricators or participating builders in your area.";
+      document.getElementById("mobileBriefResult").textContent = running === 0 ? "Your estimate is ready" : `${(recommended/1000).toFixed(1)} kW estimate ready`;
+      document.getElementById("mobileBriefBar").classList.toggle("is-visible", running > 0 && !document.getElementById("quote-request").matches(":target"));
+      document.getElementById("mobileBriefBar").setAttribute("aria-hidden", running === 0 ? "true" : "false");
+      document.body.classList.toggle("has-mobile-brief-bar", running > 0);
       return { runningWatts:running, safetyMarginPercent:Math.round((multiplier-1)*100), recommendedGeneratorKw:Number((recommended/1000).toFixed(1)) };
     }
     let calculatorStarted = false;
@@ -410,6 +431,17 @@
       }
       track("quote_bridge_clicked", { ...currentTotals, country_code:country.value, appliance_count:checked().length });
     });
+    document.getElementById("mobileBriefButton").addEventListener("click",() => {
+      const currentTotals = totals();
+      track("mobile_quote_bar_clicked", { ...currentTotals, country_code:country.value, appliance_count:checked().length });
+    });
+    const quoteSectionObserver = new IntersectionObserver(entries => {
+      const quoteSectionVisible = entries.some(entry => entry.isIntersecting);
+      const hasEstimate = totals().runningWatts > 0;
+      document.getElementById("mobileBriefBar").classList.toggle("is-visible", hasEstimate && !quoteSectionVisible);
+      document.getElementById("mobileBriefBar").setAttribute("aria-hidden", hasEstimate && !quoteSectionVisible ? "false" : "true");
+    }, { threshold:.08 });
+    quoteSectionObserver.observe(document.getElementById("quote-request"));
     document.addEventListener("click",event => {
       const link = event.target.closest("a");
       if (!link) return;
