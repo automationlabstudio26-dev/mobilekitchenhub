@@ -2,6 +2,21 @@
 
 Use this log to connect website changes to qualified operator leads and builder revenue. Revenue is counted only after confirmed payment.
 
+## Active: Operator referral sharing loop
+
+- **Launched:** 20 November 2026
+- **Commit:** `376007b`
+- **Audience:** Operators, associations and community members who know someone planning a food truck or trailer
+- **Observed baseline:** Six referral organizations were contacted on 20 November 2026; the quote-acquisition page had no native sharing controls
+- **Problem:** A recipient who wants to pass the free tool to an operator must manually copy and explain the link, losing attribution and creating avoidable friction
+- **Change:** Add WhatsApp, LinkedIn, Facebook and email sharing controls to `/get-food-truck-build-quotes/`, with campaign attribution and a tracked share event
+- **Primary event:** `operator_tool_shared`
+- **Attribution:** `utm_source=operator_share`, `utm_medium=referral`, `utm_campaign=operator_referrals`
+- **Downstream events:** `operator_quote_landing_cta`, `calculator_started`, `quote_form_started`, `lead_submitted`
+- **Primary success metric:** Verified operator leads attributed to the share campaign
+- **Guardrail:** Sharing is optional; do not imply endorsement, guaranteed quotations, or guaranteed builder availability
+- **Review window:** First review after 50 share events or 28 days, whichever occurs later
+
 ## Active: Bottom-of-funnel build-quote landing page
 
 - **Launched:** 20 November 2026
