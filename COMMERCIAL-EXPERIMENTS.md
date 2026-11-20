@@ -2,6 +2,19 @@
 
 Use this log to connect website changes to qualified operator leads and builder revenue. Revenue is counted only after confirmed payment.
 
+## Active: Bottom-of-funnel build-quote landing page
+
+- **Launched:** 20 November 2026
+- **Audience:** Organic and referral visitors searching for food-truck or food-trailer build quotes
+- **Observed baseline:** No verified real operator lead notifications from 1–20 November 2026
+- **Problem:** The homepage leads with generator sizing, while quotation-intent visitors need a page that explains the complete structured brief, matching process, consent boundary and no-obligation next step
+- **Change:** Publish `/get-food-truck-build-quotes/` with a focused value proposition, intake-field preview, four-step matching explanation, FAQ schema and three tracked calculator CTAs
+- **Primary event:** `operator_quote_landing_cta`
+- **Downstream events:** `calculator_started`, `quote_form_started`, `lead_submitted`
+- **Primary success metric:** Verified real leads whose landing page or first-touch landing page is the build-quote page
+- **Guardrail:** Do not imply guaranteed builder availability, responses, quotations or approvals
+- **Review window:** First review after 100 page views or 28 days, whichever occurs later
+
 ## Active: Mobile calculator-to-brief bar
 
 - **Launched:** 20 November 2026

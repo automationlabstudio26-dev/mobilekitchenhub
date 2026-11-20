@@ -1,5 +1,6 @@
 # Clean URL routing for MobileKitchenHub
 /calc/generator        /index.html#calculator                  302
+/get-food-truck-build-quotes /get-food-truck-build-quotes.html 200
 /calc/electrical       /food-truck-electrical-panel-guide.html 200
 /calculators/food-truck-battery-bank-sizing /food-truck-battery-bank-calculator.html 200
 /calculators/food-trailer-weight-distribution /food-trailer-weight-distribution-calculator.html 200
