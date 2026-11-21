@@ -2,6 +2,21 @@
 
 Use this log to connect website changes to qualified operator leads and builder revenue. Revenue is counted only after confirmed payment.
 
+## Active: Builder approval-to-subscription funnel
+
+- **Launched:** 21 November 2026
+- **Commit:** `53a92b0`
+- **Audience:** Food-truck builders, fabricators and conversion specialists interested in receiving structured buyer briefs
+- **Observed baseline:** No confirmed paying builder partner; the public pricing page allowed visitors to enter checkout before coverage and lead criteria were reviewed
+- **Problem:** A builder could pay before Mobile Kitchen Hub confirmed service-area fit or current enquiry availability, creating avoidable refund and trust risk
+- **Change:** Make the no-charge application the required first step, label both Stripe links for approved builders, retain checkout access after approval, and change the post-checkout page so it does not claim activation before service-area verification
+- **Application event:** `generate_lead` with a `partner_*` lead type
+- **Checkout event:** `begin_checkout` with the selected partner package and GBP value
+- **Primary success metric:** Confirmed paid builder subscriptions following an approved application
+- **Supporting metrics:** Partner applications, approved applicants, suitable samples reviewed, checkout starts and confirmed payments
+- **Guardrail:** Do not count a checkout visit, application, test, pending payment or unverified Stripe event as revenue; do not invite payment until coverage and current enquiry availability have been reviewed
+- **Review window:** Review after the first 10 complete partner applications or 28 days, whichever occurs later
+
 ## Active: Planning-page to project-brief bridge
 
 - **Launched:** 21 November 2026
