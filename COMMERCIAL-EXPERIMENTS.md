@@ -2,7 +2,7 @@
 
 Use this log to connect website changes to qualified operator leads and builder revenue. Revenue is counted only after confirmed payment.
 
-## Ready to launch: LinkedIn operator-acquisition post
+## Not launched: LinkedIn operator-acquisition post
 
 - **Prepared:** 21 November 2026
 - **Audience:** People planning a food truck or trailer, plus community members who may refer an operator
@@ -12,7 +12,8 @@ Use this log to connect website changes to qualified operator leads and builder 
 - **Primary success metric:** Verified operator leads attributed to `operator_acquisition_nov2026`
 - **Supporting metrics:** Landing-page visits, calculator starts, quote-form starts and completed lead submissions
 - **Guardrail:** Free organic post only; do not imply certification, guaranteed quotations, guaranteed builder availability or paid endorsement
-- **Status:** Awaiting final approval immediately before public posting
+- **Status:** Cancelled on 21 November 2026 at the founder's request because the available LinkedIn profile is personal and professional; do not publish from that account
+- **Alternative:** Retain the asset for possible use only if a dedicated Mobile Kitchen Hub business profile is created and separately approved
 
 **Approved-copy candidate:**
 
