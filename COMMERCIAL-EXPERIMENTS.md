@@ -2,6 +2,20 @@
 
 Use this log to connect website changes to qualified operator leads and builder revenue. Revenue is counted only after confirmed payment.
 
+## Active: Planning-page to project-brief bridge
+
+- **Launched:** 21 November 2026
+- **Audience:** Visitors reading city hubs, technical guides, calculators, equipment pages, builder directories and planning resources
+- **Observed baseline:** The quote-acquisition page was present in the sitemap and homepage, but most planning pages only returned visitors to the calculator
+- **Problem:** High-intent readers could finish a guide without seeing a direct, explained path into the structured project-brief funnel
+- **Change:** Add a responsive end-of-content bridge with a free-project-brief CTA, calculator alternative, source-page attribution and explicit availability disclaimer
+- **Primary event:** `operator_quote_bridge_clicked`
+- **Attribution:** `utm_source=internal_site`, `utm_medium=cta`, `utm_campaign=operator_quote_bridge`, with the source page in `utm_content`
+- **Downstream events:** `operator_quote_landing_cta`, `calculator_started`, `quote_form_started`, `lead_submitted`
+- **Primary success metric:** Verified operator leads attributed to `operator_quote_bridge`
+- **Guardrail:** Do not imply guaranteed builder availability, responses, quotations, certification or approval
+- **Review window:** First review after 100 bridge impressions or 28 days, whichever occurs later
+
 ## Not launched: LinkedIn operator-acquisition post
 
 - **Prepared:** 21 November 2026
