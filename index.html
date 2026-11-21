@@ -377,7 +377,13 @@
       try { storedAttribution = JSON.parse(localStorage.getItem("mkh_attribution_v1") || "{}"); } catch (_) { storedAttribution = {}; }
       const firstTouch = storedAttribution.first_touch || {};
       const lastTouch = storedAttribution.last_touch || {};
-      const attribution = Object.fromEntries(["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].map(key => [key,queryParams.get(key) || lastTouch[key] || firstTouch[key] || ""]));
+      const attributionKeys = ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"];
+      const attribution = Object.fromEntries(attributionKeys.map(key => [key,queryParams.get(key) || lastTouch[key] || firstTouch[key] || ""]));
+      const campaignFieldName = (prefix,key) => `${prefix}${key.split("_").map(part => part.charAt(0).toUpperCase() + part.slice(1)).join("")}`;
+      const firstTouchAttribution = Object.fromEntries(attributionKeys.map(key => [campaignFieldName("firstTouch",key),firstTouch[key] || ""]));
+      const lastTouchAttribution = Object.fromEntries(attributionKeys.map(key => [campaignFieldName("lastTouch",key),lastTouch[key] || ""]));
+      const leadSource = firstTouch.utm_source || attribution.utm_source || "direct_or_organic";
+      const acquisitionCampaign = firstTouch.utm_campaign || attribution.utm_campaign || "";
       const targetDate = data.get("targetDate");
       const daysToTarget = targetDate ? Math.ceil((new Date(`${targetDate}T00:00:00`) - new Date()) / 86400000) : null;
       const intentPoints = (data.get("projectStage") === "Ready for quotations" ? 3 : data.get("projectStage") === "Vehicle selected" || data.get("projectStage") === "Build already underway" ? 2 : 0)
@@ -385,7 +391,7 @@
         + (data.get("phone").trim() ? 1 : 0)
         + (daysToTarget !== null && daysToTarget >= 0 && daysToTarget <= 180 ? 2 : 0);
       const leadPriority = intentPoints >= 6 ? "High intent" : intentPoints >= 3 ? "Qualified" : "Early stage";
-      const payload = { name:data.get("name"), email:data.get("email"), phone:data.get("phone").trim(), menuConcept:data.get("menuConcept").trim(), dailyCovers:Number(data.get("dailyCovers") || 0), customAppliance:data.get("customAppliance").trim(), customWatts, projectStage:data.get("projectStage"), vehicleSize:data.get("vehicleSize").trim(), budget:data.get("budget"), targetDate, leadPriority, intentScore:intentPoints, state:`${market.name} — ${location}`, countryCode:selectedCountry, country:market.name, location, electricalStandard:market.supply, currencyCode:market.currency, consent:true, ...totals(), appliances:selected, source:"MobileKitchenHub.com", landingPage:window.location.href, referrer:document.referrer, firstTouchLandingPage:firstTouch.landing_page || "", firstTouchReferrer:firstTouch.referrer || "", firstTouchCapturedAt:firstTouch.captured_at || "", lastTouchLandingPage:lastTouch.landing_page || "", lastTouchReferrer:lastTouch.referrer || "", lastTouchCapturedAt:lastTouch.captured_at || "", ...attribution, submittedAt:new Date().toISOString() };
+      const payload = { name:data.get("name"), email:data.get("email"), phone:data.get("phone").trim(), menuConcept:data.get("menuConcept").trim(), dailyCovers:Number(data.get("dailyCovers") || 0), customAppliance:data.get("customAppliance").trim(), customWatts, projectStage:data.get("projectStage"), vehicleSize:data.get("vehicleSize").trim(), budget:data.get("budget"), targetDate, leadPriority, intentScore:intentPoints, state:`${market.name} — ${location}`, countryCode:selectedCountry, country:market.name, location, electricalStandard:market.supply, currencyCode:market.currency, consent:true, ...totals(), appliances:selected, source:`MobileKitchenHub.com — ${leadSource}`, leadSource, acquisitionCampaign, landingPage:window.location.href, referrer:document.referrer, firstTouchLandingPage:firstTouch.landing_page || "", firstTouchReferrer:firstTouch.referrer || "", firstTouchCapturedAt:firstTouch.captured_at || "", ...firstTouchAttribution, lastTouchLandingPage:lastTouch.landing_page || "", lastTouchReferrer:lastTouch.referrer || "", lastTouchCapturedAt:lastTouch.captured_at || "", ...lastTouchAttribution, ...attribution, submittedAt:new Date().toISOString() };
       button.disabled = true; button.textContent = "Sending…";
       try {
         const equipmentText = [
@@ -415,7 +421,7 @@
         const response = await fetch(WEBHOOK_URL,{method:"POST",body:webhookBody,mode:"no-cors"});
         if (response.type !== "opaque" && !response.ok) throw new Error(`Submission failed (${response.status})`);
         form.reset(); updateMarket(); totals(); showFormStep("project"); status.textContent = "Thank you—your request was sent for processing."; status.dataset.kind = "success";
-        track("lead_submitted", { country_code:selectedCountry, running_watts:payload.runningWatts, recommended_generator_kw:payload.recommendedGeneratorKw, appliance_count:payload.appliances.length, lead_priority:payload.leadPriority, intent_score:payload.intentScore });
+        track("lead_submitted", { country_code:selectedCountry, running_watts:payload.runningWatts, recommended_generator_kw:payload.recommendedGeneratorKw, appliance_count:payload.appliances.length, lead_priority:payload.leadPriority, intent_score:payload.intentScore, lead_source:payload.leadSource, acquisition_campaign:payload.acquisitionCampaign });
       } catch (error) {
         status.textContent = "We couldn't send your request. Please try again or contact us directly."; status.dataset.kind = "error";
         track("lead_submission_failed", { country_code:selectedCountry });
