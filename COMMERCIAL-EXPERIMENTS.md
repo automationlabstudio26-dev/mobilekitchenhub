@@ -68,6 +68,13 @@ Use this log to connect website changes to qualified operator leads and builder 
 - **Change:** Add WhatsApp, LinkedIn, Facebook and email sharing controls to `/get-food-truck-build-quotes/`, with campaign attribution and a tracked share event
 - **Primary event:** `operator_tool_shared`
 - **Attribution:** `utm_source=operator_share`, `utm_medium=referral`, `utm_campaign=operator_referrals`
+
+### Referral-source preservation update — 21 November 2026
+
+- **Problem found:** The quote page's sharing controls replaced an incoming partner's `utm_source` with the generic `operator_share` value, so second-generation referrals could not be credited to the originating organization.
+- **Change:** Preserve the incoming source, medium and campaign in WhatsApp, email, Facebook, LinkedIn and copied share links; mark the new hop with `utm_content=shared_from_quote_page`.
+- **Usability:** Added a `Copy share link` control that copies the referral text and attributed URL without requiring a social account.
+- **Success measure:** Attributed visits and verified leads by referral organization in the commercial pipeline workbook.
 - **Downstream events:** `operator_quote_landing_cta`, `calculator_started`, `quote_form_started`, `lead_submitted`
 - **Primary success metric:** Verified operator leads attributed to the share campaign
 - **Guardrail:** Sharing is optional; do not imply endorsement, guaranteed quotations, or guaranteed builder availability
