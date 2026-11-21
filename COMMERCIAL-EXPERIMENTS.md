@@ -118,6 +118,18 @@ Use this log to connect website changes to qualified operator leads and builder 
 | High-intent mobile leads | 0 | — |
 | Confirmed revenue | £0 | — |
 
+## Active: Lead traceability and duplicate protection
+
+- **Launched:** 21 November 2026
+- **Audience:** Operators completing the structured project-brief form
+- **Observed baseline:** Successful browser submissions had no operator-visible reference, and an identical brief could be submitted repeatedly after the first request completed
+- **Problem:** Duplicate webhook runs create avoidable Make, Airtable and email noise, while a missing reference makes it harder to reconcile a user question with the originating submission
+- **Change:** Generate a non-personal `MKH-…` lead reference, send it with the webhook payload, display it after submission, include it in the `lead_submitted` event and prevent an exact duplicate for five minutes unless the project details change
+- **Primary events:** `lead_submitted`, `lead_duplicate_prevented`
+- **Primary success metric:** Verified leads can be reconciled by reference without duplicate Airtable records or duplicate dispatch emails
+- **Guardrail:** The duplicate window applies only to an exact client-side fingerprint and expires after five minutes; altered briefs remain submittable
+- **Review window:** Review after the next 10 real submissions or 28 days, whichever occurs later
+
 ## Measurement rules
 
 1. Use GA4 for aggregate funnel events and campaign attribution; never send names, emails, phone numbers, menu text, or locations to analytics.

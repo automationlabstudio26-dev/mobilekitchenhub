@@ -318,6 +318,19 @@
       track("market_changed", { country_code:country.value, electrical_standard:markets[country.value].supply });
     });
     const form = document.getElementById("leadForm"), status = document.getElementById("formStatus"), button = document.getElementById("submitButton");
+    const submissionDedupeKey = "mkh_last_lead_submission_v1";
+    function leadReference() {
+      const token = typeof crypto.randomUUID === "function" ? crypto.randomUUID().replace(/-/g, "").slice(0, 10) : `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
+      return `MKH-${token.toUpperCase()}`;
+    }
+    function dedupeFingerprint(value) {
+      let hash = 2166136261;
+      for (let index = 0; index < value.length; index += 1) {
+        hash ^= value.charCodeAt(index);
+        hash = Math.imul(hash, 16777619);
+      }
+      return (hash >>> 0).toString(16).padStart(8, "0");
+    }
     const projectStep = document.getElementById("projectStep"), contactStep = document.getElementById("contactStep");
     function showFormStep(step) {
       const showContact = step === "contact";
@@ -391,7 +404,17 @@
         + (data.get("phone").trim() ? 1 : 0)
         + (daysToTarget !== null && daysToTarget >= 0 && daysToTarget <= 180 ? 2 : 0);
       const leadPriority = intentPoints >= 6 ? "High intent" : intentPoints >= 3 ? "Qualified" : "Early stage";
-      const payload = { name:data.get("name"), email:data.get("email"), phone:data.get("phone").trim(), menuConcept:data.get("menuConcept").trim(), dailyCovers:Number(data.get("dailyCovers") || 0), customAppliance:data.get("customAppliance").trim(), customWatts, projectStage:data.get("projectStage"), vehicleSize:data.get("vehicleSize").trim(), budget:data.get("budget"), targetDate, leadPriority, intentScore:intentPoints, state:`${market.name} — ${location}`, countryCode:selectedCountry, country:market.name, location, electricalStandard:market.supply, currencyCode:market.currency, consent:true, ...totals(), appliances:selected, source:`MobileKitchenHub.com — ${leadSource}`, leadSource, acquisitionCampaign, landingPage:window.location.href, referrer:document.referrer, firstTouchLandingPage:firstTouch.landing_page || "", firstTouchReferrer:firstTouch.referrer || "", firstTouchCapturedAt:firstTouch.captured_at || "", ...firstTouchAttribution, lastTouchLandingPage:lastTouch.landing_page || "", lastTouchReferrer:lastTouch.referrer || "", lastTouchCapturedAt:lastTouch.captured_at || "", ...lastTouchAttribution, ...attribution, submittedAt:new Date().toISOString() };
+      const submissionReference = leadReference();
+      const payload = { leadReference:submissionReference, name:data.get("name"), email:data.get("email"), phone:data.get("phone").trim(), menuConcept:data.get("menuConcept").trim(), dailyCovers:Number(data.get("dailyCovers") || 0), customAppliance:data.get("customAppliance").trim(), customWatts, projectStage:data.get("projectStage"), vehicleSize:data.get("vehicleSize").trim(), budget:data.get("budget"), targetDate, leadPriority, intentScore:intentPoints, state:`${market.name} — ${location}`, countryCode:selectedCountry, country:market.name, location, electricalStandard:market.supply, currencyCode:market.currency, consent:true, ...totals(), appliances:selected, source:`MobileKitchenHub.com — ${leadSource}`, leadSource, acquisitionCampaign, landingPage:window.location.href, referrer:document.referrer, firstTouchLandingPage:firstTouch.landing_page || "", firstTouchReferrer:firstTouch.referrer || "", firstTouchCapturedAt:firstTouch.captured_at || "", ...firstTouchAttribution, lastTouchLandingPage:lastTouch.landing_page || "", lastTouchReferrer:lastTouch.referrer || "", lastTouchCapturedAt:lastTouch.captured_at || "", ...lastTouchAttribution, ...attribution, submittedAt:new Date().toISOString() };
+      const fingerprint = dedupeFingerprint(JSON.stringify({email:payload.email.trim().toLowerCase(),location:payload.location.trim().toLowerCase(),menu:payload.menuConcept.trim().toLowerCase(),appliances:payload.appliances,budget:payload.budget,targetDate:payload.targetDate}));
+      let previousSubmission = {};
+      try { previousSubmission = JSON.parse(localStorage.getItem(submissionDedupeKey) || "{}"); } catch (_) { previousSubmission = {}; }
+      if (previousSubmission.fingerprint === fingerprint && Date.now() - Number(previousSubmission.submittedAt || 0) < 300000) {
+        status.textContent = `This exact brief was already sent for processing${previousSubmission.leadReference ? ` (reference ${previousSubmission.leadReference})` : ""}. Change a project detail before submitting again.`;
+        status.dataset.kind = "success";
+        track("lead_duplicate_prevented", { country_code:selectedCountry, lead_reference:previousSubmission.leadReference || "" });
+        return;
+      }
       button.disabled = true; button.textContent = "Sending…";
       try {
         const equipmentText = [
@@ -420,8 +443,9 @@
         });
         const response = await fetch(WEBHOOK_URL,{method:"POST",body:webhookBody,mode:"no-cors"});
         if (response.type !== "opaque" && !response.ok) throw new Error(`Submission failed (${response.status})`);
-        form.reset(); updateMarket(); totals(); showFormStep("project"); status.textContent = "Thank you—your request was sent for processing."; status.dataset.kind = "success";
-        track("lead_submitted", { country_code:selectedCountry, running_watts:payload.runningWatts, recommended_generator_kw:payload.recommendedGeneratorKw, appliance_count:payload.appliances.length, lead_priority:payload.leadPriority, intent_score:payload.intentScore, lead_source:payload.leadSource, acquisition_campaign:payload.acquisitionCampaign });
+        try { localStorage.setItem(submissionDedupeKey, JSON.stringify({fingerprint,submittedAt:Date.now(),leadReference:payload.leadReference})); } catch (_) {}
+        form.reset(); updateMarket(); totals(); showFormStep("project"); status.textContent = `Thank you—your request was sent for processing. Your reference is ${payload.leadReference}.`; status.dataset.kind = "success";
+        track("lead_submitted", { country_code:selectedCountry, running_watts:payload.runningWatts, recommended_generator_kw:payload.recommendedGeneratorKw, appliance_count:payload.appliances.length, lead_priority:payload.leadPriority, intent_score:payload.intentScore, lead_source:payload.leadSource, acquisition_campaign:payload.acquisitionCampaign, lead_reference:payload.leadReference });
       } catch (error) {
         status.textContent = "We couldn't send your request. Please try again or contact us directly."; status.dataset.kind = "error";
         track("lead_submission_failed", { country_code:selectedCountry });
