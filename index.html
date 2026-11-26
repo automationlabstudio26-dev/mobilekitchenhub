@@ -318,6 +318,22 @@
       track("market_changed", { country_code:country.value, electrical_standard:markets[country.value].supply });
     });
     const form = document.getElementById("leadForm"), status = document.getElementById("formStatus"), button = document.getElementById("submitButton");
+    const projectDraftKey = "mkh_project_draft_v1";
+    const projectDraftFields = ["menuConcept","customAppliance","customWatts","state","projectStage","vehicleSize","dailyCovers","budget","targetDate"];
+    let projectDraftTimer;
+    function saveProjectDraft() {
+      const fields = Object.fromEntries(projectDraftFields.map(id => [id,document.getElementById(id).value]));
+      const draft = { createdAt:Date.now(), country:country.value, margin:document.querySelector('input[name="margin"]:checked').value, appliances:checked().map(input => input.dataset.name), fields };
+      try { localStorage.setItem(projectDraftKey,JSON.stringify(draft)); } catch (_) {}
+    }
+    function scheduleProjectDraft() {
+      clearTimeout(projectDraftTimer);
+      projectDraftTimer = setTimeout(saveProjectDraft,250);
+    }
+    document.getElementById("projectStep").addEventListener("input",scheduleProjectDraft);
+    document.getElementById("projectStep").addEventListener("change",scheduleProjectDraft);
+    document.querySelectorAll('.appliance-input,input[name="margin"]').forEach(input => input.addEventListener("change",scheduleProjectDraft));
+    country.addEventListener("change",scheduleProjectDraft);
     const submissionDedupeKey = "mkh_last_lead_submission_v1";
     function leadReference() {
       const token = typeof crypto.randomUUID === "function" ? crypto.randomUUID().replace(/-/g, "").slice(0, 10) : `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
@@ -443,7 +459,7 @@
         });
         const response = await fetch(WEBHOOK_URL,{method:"POST",body:webhookBody,mode:"no-cors"});
         if (response.type !== "opaque" && !response.ok) throw new Error(`Submission failed (${response.status})`);
-        try { localStorage.setItem(submissionDedupeKey, JSON.stringify({fingerprint,submittedAt:Date.now(),leadReference:payload.leadReference})); } catch (_) {}
+        try { localStorage.setItem(submissionDedupeKey, JSON.stringify({fingerprint,submittedAt:Date.now(),leadReference:payload.leadReference})); localStorage.removeItem(projectDraftKey); } catch (_) {}
         form.reset(); updateMarket(); totals(); showFormStep("project"); status.textContent = `Thank you—your request was sent for processing. Your reference is ${payload.leadReference}.`; status.dataset.kind = "success";
         track("lead_submitted", { country_code:selectedCountry, running_watts:payload.runningWatts, recommended_generator_kw:payload.recommendedGeneratorKw, appliance_count:payload.appliances.length, lead_priority:payload.leadPriority, intent_score:payload.intentScore, lead_source:payload.leadSource, acquisition_campaign:payload.acquisitionCampaign, lead_reference:payload.leadReference });
       } catch (error) {
@@ -502,6 +518,31 @@
       status.textContent = "Your business-plan details were carried into this brief. Select the appliances you expect to run.";
       status.dataset.kind = "success";
       track("business_plan_handoff_loaded", { country_code:country.value, has_location:Boolean(businessPlanHandoff.location), has_vehicle:Boolean(businessPlanHandoff.vehicle) });
+    }
+    let projectDraft = {};
+    try { projectDraft = JSON.parse(localStorage.getItem(projectDraftKey) || "{}"); } catch (_) { projectDraft = {}; }
+    if (projectDraft.createdAt && Date.now() - Number(projectDraft.createdAt) < 86400000) {
+      const hasHandoff = Boolean(businessPlanHandoff.createdAt && Date.now() - Number(businessPlanHandoff.createdAt) < 3600000);
+      if (!hasHandoff && markets[projectDraft.country]) country.value = projectDraft.country;
+      projectDraftFields.forEach(id => {
+        const field = document.getElementById(id), savedValue = projectDraft.fields?.[id];
+        if (field && !field.value && savedValue !== undefined) field.value = String(savedValue).slice(0,field.maxLength > 0 ? field.maxLength : 500);
+      });
+      if (!hasHandoff && projectDraft.margin) {
+        const margin = document.querySelector(`input[name="margin"][value="${projectDraft.margin}"]`);
+        if (margin) margin.checked = true;
+      }
+      (projectDraft.appliances || []).forEach(name => {
+        const appliance = [...document.querySelectorAll(".appliance-input")].find(input => input.dataset.name === name);
+        if (appliance) appliance.checked = true;
+      });
+      if (!status.textContent && (projectDraft.appliances?.length || Object.values(projectDraft.fields || {}).some(Boolean))) {
+        status.textContent = "Your unfinished project brief was restored on this device. Contact details are never saved in the draft.";
+        status.dataset.kind = "success";
+        track("project_brief_draft_restored", { country_code:country.value, appliance_count:(projectDraft.appliances || []).length });
+      }
+    } else if (projectDraft.createdAt) {
+      try { localStorage.removeItem(projectDraftKey); } catch (_) {}
     }
     const preselected = (queryParams.get("preselect") || "").toLowerCase().split(",").filter(Boolean);
     const preselectTerms = {fryer:"fryer",griddle:"griddle",espresso:"espresso",refrigeration:"refriger",ac:"air conditioner",hood:"hood"};
