@@ -186,7 +186,7 @@
             <div class="metric"><span class="metric-label">Recommended generator size</span><output class="metric-value" id="generatorSize">0.0 kW</output></div>
             <p id="marginSummary">Includes a 20% safety margin.</p>
             <p class="note">Planning estimate only. Appliance ratings vary by country and model. Confirm startup surge, voltage, frequency, phase, fuel, local codes, and manufacturer requirements with a qualified local electrician and generator supplier.</p>
-            <div class="result-bridge" id="resultBridge"><strong id="bridgeHeadline">Select your equipment to create a project brief.</strong><span id="bridgeCopy">Your chosen appliances and power estimate will be carried into the enquiry automatically.</span><a class="button button-primary" id="quoteBridgeButton" href="#quote-request" aria-disabled="true">Send My Spec Brief to Regional Fabricators</a></div>
+            <div class="result-bridge" id="resultBridge"><strong id="bridgeHeadline">Select your equipment to create a project brief.</strong><span id="bridgeCopy">Your chosen appliances and power estimate will be carried into the enquiry automatically.</span><a class="button button-primary" id="quoteBridgeButton" href="#quote-request" aria-disabled="true">Send My Spec Brief to Regional Fabricators</a><button class="button button-secondary" id="copyEstimateLink" type="button" disabled>Copy Estimate Link</button><span id="shareEstimateStatus" role="status"></span></div>
           </aside>
         </div>
       </div>
@@ -288,6 +288,7 @@
       document.getElementById("marginSummary").textContent = `Includes a ${Math.round((multiplier-1)*100)}% safety margin.`;
       const bridgeButton = document.getElementById("quoteBridgeButton");
       bridgeButton.setAttribute("aria-disabled", running === 0 ? "true" : "false");
+      document.getElementById("copyEstimateLink").disabled = running === 0;
       document.getElementById("bridgeHeadline").textContent = running === 0 ? "Select your equipment to create a project brief." : `Calculated ${(recommended/1000).toFixed(1)} kW? Turn it into a builder-ready brief.`;
       document.getElementById("bridgeCopy").textContent = running === 0 ? "Your chosen appliances and power estimate will be carried into the enquiry automatically." : "Don't risk electrical overload or avoidable approval delays. Share this exact equipment list with regional fabricators or participating builders in your area.";
       document.getElementById("mobileBriefResult").textContent = running === 0 ? "Your estimate is ready" : `${(recommended/1000).toFixed(1)} kW estimate ready`;
@@ -481,6 +482,25 @@
       const currentTotals = totals();
       track("mobile_quote_bar_clicked", { ...currentTotals, country_code:country.value, appliance_count:checked().length });
     });
+    document.getElementById("copyEstimateLink").addEventListener("click",async () => {
+      const currentTotals = totals();
+      if (!currentTotals.runningWatts) return;
+      const shareUrl = new URL(location.origin + location.pathname);
+      shareUrl.searchParams.set("utm_source","calculator_share");
+      shareUrl.searchParams.set("utm_medium","referral");
+      shareUrl.searchParams.set("utm_campaign","power_estimate_share");
+      shareUrl.searchParams.set("market",country.value);
+      shareUrl.searchParams.set("safety",document.querySelector('input[name="margin"]:checked').value);
+      shareUrl.searchParams.set("equipment",checked().map(input => input.id.replace("appliance-","")).join(","));
+      shareUrl.hash = "calculator";
+      try {
+        await navigator.clipboard.writeText(shareUrl.toString());
+        document.getElementById("shareEstimateStatus").textContent = "Estimate link copied. It contains equipment choices only—no contact details.";
+        track("calculator_estimate_link_copied", { country_code:country.value, appliance_count:checked().length, ...currentTotals });
+      } catch (_) {
+        document.getElementById("shareEstimateStatus").textContent = "Copy was unavailable in this browser. You can copy the page address after reopening the calculator.";
+      }
+    });
     const quoteSectionObserver = new IntersectionObserver(entries => {
       const quoteSectionVisible = entries.some(entry => entry.isIntersecting);
       const hasEstimate = totals().runningWatts > 0;
@@ -497,6 +517,12 @@
       }
     });
     const queryParams = new URLSearchParams(location.search);
+    const sharedMarket = queryParams.get("market");
+    const sharedEquipment = queryParams.get("equipment") || "";
+    const hasSharedEstimate = Boolean(sharedMarket || sharedEquipment || queryParams.get("safety"));
+    if (sharedMarket && markets[sharedMarket]) country.value = sharedMarket;
+    const sharedSafety = queryParams.get("safety");
+    if (["1.2","1.35"].includes(sharedSafety)) document.querySelector(`input[name="margin"][value="${sharedSafety}"]`).checked = true;
     const requestedCity = queryParams.get("city");
     if (requestedCity) locationInput.value = requestedCity.slice(0,80);
     const requestedStage = queryParams.get("projectStage");
@@ -510,7 +536,7 @@
     } catch (_) { businessPlanHandoff = {}; }
     if (businessPlanHandoff.createdAt && Date.now() - Number(businessPlanHandoff.createdAt) < 3600000) {
       const currencyCountry = { GBP:"GB", USD:"US", CAD:"CA", AUD:"AU", EUR:"EU" };
-      if (currencyCountry[businessPlanHandoff.currency]) country.value = currencyCountry[businessPlanHandoff.currency];
+      if (!sharedMarket && currencyCountry[businessPlanHandoff.currency]) country.value = currencyCountry[businessPlanHandoff.currency];
       if (!requestedCity && businessPlanHandoff.location) locationInput.value = String(businessPlanHandoff.location).slice(0,80);
       if (!requestedStage) projectStage.value = "Researching options";
       if (!requestedVehicle && businessPlanHandoff.vehicle) vehicleSize.value = String(businessPlanHandoff.vehicle).slice(0,80);
@@ -521,21 +547,23 @@
     }
     let projectDraft = {};
     try { projectDraft = JSON.parse(localStorage.getItem(projectDraftKey) || "{}"); } catch (_) { projectDraft = {}; }
-    if (projectDraft.createdAt && Date.now() - Number(projectDraft.createdAt) < 86400000) {
+    if (!hasSharedEstimate && projectDraft.createdAt && Date.now() - Number(projectDraft.createdAt) < 86400000) {
       const hasHandoff = Boolean(businessPlanHandoff.createdAt && Date.now() - Number(businessPlanHandoff.createdAt) < 3600000);
-      if (!hasHandoff && markets[projectDraft.country]) country.value = projectDraft.country;
+      if (!hasHandoff && !hasSharedEstimate && markets[projectDraft.country]) country.value = projectDraft.country;
       projectDraftFields.forEach(id => {
         const field = document.getElementById(id), savedValue = projectDraft.fields?.[id];
         if (field && !field.value && savedValue !== undefined) field.value = String(savedValue).slice(0,field.maxLength > 0 ? field.maxLength : 500);
       });
-      if (!hasHandoff && projectDraft.margin) {
+      if (!hasHandoff && !hasSharedEstimate && projectDraft.margin) {
         const margin = document.querySelector(`input[name="margin"][value="${projectDraft.margin}"]`);
         if (margin) margin.checked = true;
       }
-      (projectDraft.appliances || []).forEach(name => {
-        const appliance = [...document.querySelectorAll(".appliance-input")].find(input => input.dataset.name === name);
-        if (appliance) appliance.checked = true;
-      });
+      if (!hasSharedEstimate) {
+        (projectDraft.appliances || []).forEach(name => {
+          const appliance = [...document.querySelectorAll(".appliance-input")].find(input => input.dataset.name === name);
+          if (appliance) appliance.checked = true;
+        });
+      }
       if (!status.textContent && (projectDraft.appliances?.length || Object.values(projectDraft.fields || {}).some(Boolean))) {
         status.textContent = "Your unfinished project brief was restored on this device. Contact details are never saved in the draft.";
         status.dataset.kind = "success";
@@ -550,6 +578,10 @@
       const term = preselectTerms[key];
       const item = appliances.findIndex(appliance => term && appliance[0].toLowerCase().includes(term));
       if (item >= 0) document.getElementById(`appliance-${item}`).checked = true;
+    });
+    sharedEquipment.split(",").filter(value => /^\d+$/.test(value)).forEach(value => {
+      const appliance = document.getElementById(`appliance-${value}`);
+      if (appliance) appliance.checked = true;
     });
     document.getElementById("year").textContent = new Date().getFullYear(); updateMarket(); totals();
   </script>

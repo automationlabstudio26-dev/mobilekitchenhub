@@ -95,6 +95,13 @@ Use this log to connect website changes to qualified operator leads and builder 
 - **Guardrail:** Sharing is optional; do not imply endorsement, guaranteed quotations, or guaranteed builder availability
 - **Review window:** First review after 50 share events or 28 days, whichever occurs later
 
+### Calculator estimate sharing update — 26 November 2026
+
+- **Change:** Add a copyable calculator link that reconstructs the visitor's market, safety margin and selected standard appliances for a co-founder, adviser, electrician or fabricator
+- **Privacy:** The link never includes location, menu, project details, name, email, phone or consent
+- **Primary event:** `calculator_estimate_link_copied`
+- **Attribution:** `utm_source=calculator_share`, `utm_medium=referral`, `utm_campaign=power_estimate_share`
+
 ## Active: Bottom-of-funnel build-quote landing page
 
 - **Launched:** 20 November 2026
