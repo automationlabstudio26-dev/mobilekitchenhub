@@ -487,6 +487,22 @@
     if (requestedStage && [...projectStage.options].some(option => option.value === requestedStage)) projectStage.value = requestedStage;
     const requestedVehicle = queryParams.get("vehicle");
     if (requestedVehicle) vehicleSize.value = requestedVehicle.slice(0,80);
+    let businessPlanHandoff = {};
+    try {
+      businessPlanHandoff = JSON.parse(sessionStorage.getItem("mkh_business_plan_handoff_v1") || "{}");
+      sessionStorage.removeItem("mkh_business_plan_handoff_v1");
+    } catch (_) { businessPlanHandoff = {}; }
+    if (businessPlanHandoff.createdAt && Date.now() - Number(businessPlanHandoff.createdAt) < 3600000) {
+      const currencyCountry = { GBP:"GB", USD:"US", CAD:"CA", AUD:"AU", EUR:"EU" };
+      if (currencyCountry[businessPlanHandoff.currency]) country.value = currencyCountry[businessPlanHandoff.currency];
+      if (!requestedCity && businessPlanHandoff.location) locationInput.value = String(businessPlanHandoff.location).slice(0,80);
+      if (!requestedStage) projectStage.value = "Researching options";
+      if (!requestedVehicle && businessPlanHandoff.vehicle) vehicleSize.value = String(businessPlanHandoff.vehicle).slice(0,80);
+      if (businessPlanHandoff.menuConcept) document.getElementById("menuConcept").value = String(businessPlanHandoff.menuConcept).slice(0,180);
+      status.textContent = "Your business-plan details were carried into this brief. Select the appliances you expect to run.";
+      status.dataset.kind = "success";
+      track("business_plan_handoff_loaded", { country_code:country.value, has_location:Boolean(businessPlanHandoff.location), has_vehicle:Boolean(businessPlanHandoff.vehicle) });
+    }
     const preselected = (queryParams.get("preselect") || "").toLowerCase().split(",").filter(Boolean);
     const preselectTerms = {fryer:"fryer",griddle:"griddle",espresso:"espresso",refrigeration:"refriger",ac:"air conditioner",hood:"hood"};
     preselected.forEach(key => {

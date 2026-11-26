@@ -8,8 +8,9 @@ Use this log to connect website changes to qualified operator leads and builder 
 - **Audience:** Early-stage operators searching for a food truck business plan template before requesting build quotations
 - **Observed baseline:** The site had build-cost and break-even calculators but no dedicated business-plan template or generator
 - **Change:** Add a free, browser-local plan generator covering concept, customers, menu, operations, permits, staffing, marketing, finance assumptions, risks and milestones, with copy/print controls and an attributed bridge into the project-brief funnel
+- **Conversion update (26 November):** Carry the visitor's operating region, menu/concept, planned unit and currency-derived market into the calculator and project brief for one hour in same-tab session storage; consume and remove the handoff on arrival
 - **Primary event:** `business_plan_generated`
-- **Downstream events:** `business_plan_copied`, `operator_quote_landing_cta`, `calculator_started`, `quote_form_started`, `lead_submitted`
+- **Downstream events:** `business_plan_copied`, `business_plan_handoff_loaded`, `calculator_started`, `quote_form_started`, `lead_submitted`
 - **Attribution:** `utm_source=business_plan_tool`, `utm_medium=tool_cta`, `utm_campaign=operator_quote_bridge`
 - **Primary success metric:** Verified operator leads whose first- or last-touch path includes the business-plan tool
 - **Guardrail:** Do not invent market prices, forecasts, lender approval or regulatory requirements; all figures are user-entered planning assumptions
